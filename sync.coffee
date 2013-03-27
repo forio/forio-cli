@@ -3,7 +3,7 @@ chokidar = (require "chokidar")
 exec  = (require 'child_process').exec
 color = (require "ansi-color").set
 
-options = (require './options')
+options = (require './options').options
 
 console.log "Watching", color(options.watch_dir, "white_bg+black") ,"for changes.."
 console.log ""
