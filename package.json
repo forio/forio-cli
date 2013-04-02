@@ -2,6 +2,7 @@
   "dependencies": {
     "chokidar": "~0.6.2",
     "ansi-color": "~0.2.1",
-    "optimist": "~0.3.5"
+    "optimist": "~0.3.5",
+    "progress": "~0.1.0"
   }
 }

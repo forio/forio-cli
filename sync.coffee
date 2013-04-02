@@ -11,7 +11,7 @@ console.log ""
 watcher = chokidar.watch options.watch_dir,
     ignored: (item) ->
         ignored_extensions = /\.(less|git|coffee|tmpl)/i
-        ignored_directories = /node_modules|templates/i
+        ignored_directories = /node_modules/i
         ignored_files = /grunt.js|cakefile/i
 
         ignore = item.match(ignored_extensions) or item.match(ignored_directories) or item.match(ignored_files) or (options.ignore and items.match(options.ignore))
