@@ -1,14 +1,30 @@
 fs = (require "fs")
-options = require('commander')
 
-options
+options = (require 'optimist')
     .usage("Watches for changes on provided directory and uploads to simulate")
-    .option("-c, --config_file <file>", "Path to config file", "#{__dirname}/config.json")
-    .option("-s, --sim_path [path]", "Path to simulation in author/sim_path format", String)
-    .option("-w, --watch_dir", "Directory to watch. Defaults to current.", process.cwd())
-    .option("-i, --ignore",  "Regex with pattern of files to ignore for sync", "")
+    .options("c", {
+        alias: "config_file"
+        describe: "Path to config file"
+        default: __dirname + "/config.json"
+    })
+    .options("w", {
+        alias: "watch_dir"
+        describe: "Directory to watch. Defaults to current."
+        default: process.cwd()
+    })
+    .options("s", {
+        alias: "sim_path"
+        describe: "Path to simulation in author/sim_path format"
+        demand: true
+    })
+    .options("i", {
+        alias: "ignore"
+        describe: "Regex with pattern of files to ignore for sync"
+    })
+    .argv
 
-options.parse(process.argv);
+
+# console.log "file", options
 
 ##Read creds from config
 data = fs.readFileSync(options.config_file)
