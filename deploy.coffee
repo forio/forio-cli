@@ -7,6 +7,7 @@ fs = (require 'fs')
 options = (require './options').options
 http = require 'http'
 
+die = ()-> process.kill('SIGTERM')
 getToken = (callback)->
 	process.stdout.write "Authenticating as #{options.ftp_user}................"
 	auth_params = "user_action=login&email=#{options.ftp_user}&password=#{options.password}"
@@ -29,6 +30,7 @@ getToken = (callback)->
 			if !response.token
 				process.stdout.write color('  \u2716 \n', "red")
 				console.error color(response.status_code + ":", "red+bold"), response.message
+				die()
 			else
 				process.stdout.write color('  \u2713 \n', "green")
 				callback(response.token)
@@ -44,13 +46,29 @@ uploadFile = (token, callback) ->
 		process.stdout.write color('  \u2713 \n', "green")
 		callback()
 
-exec "rm #{__dirname}/archive.zip", ()->
-	exec "zip -r #{__dirname}/archive.zip . -x@#{__dirname}/exclude.lst", {cwd: options.local_dir}, ()->
-		console.log ""
-		getToken (token)->
-			uploadFile token, ()->
-				st = fs.statSync("#{__dirname}/archive.zip")
-				sizeInMB = (st.size / (1024 * 1024)).toFixed(2)
+confirm = (str, onYes)->
+  process.stdout.write str + " (Y/n) "
+  process.stdin.setEncoding 'utf8'
+  process.stdin.once 'data', (val)->
+    if val.trim() == "Y"
+    	process.stdin.resume()
+    	onYes()
+    else
+    	die()
 
-				console.log ""
-				console.log "Uploaded", color(sizeInMB + "MB", "bold+white"), "to", color(options.sim_path, "bold+white")
+authenticateAndUpload = ()->
+	exec "rm #{__dirname}/archive.zip", ()->
+		exec "zip -r #{__dirname}/archive.zip . -x@#{__dirname}/exclude.lst", {cwd: options.local_dir}, ()->
+			console.log ""
+			getToken (token)->
+				uploadFile token, ()->
+					st = fs.statSync("#{__dirname}/archive.zip")
+					sizeInMB = (st.size / (1024 * 1024)).toFixed(2)
+
+					console.log ""
+					console.log "Uploaded", color(sizeInMB + "MB", "bold+white"), "to", color(options.sim_path, "bold+white")
+
+					die()
+
+console.log ""
+confirm "Are you sure you want to deploy " +  color(options.local_dir, "white") + " to " + color(options.sim_path, "white") + "?", authenticateAndUpload
