@@ -43,26 +43,9 @@ uploadFile = (token, callback) ->
 	exec "curl --progress-bar -L -F token=#{token} -F content=@#{__dirname}/archive.zip -F method=PUT -F unzip=true #{file_url}", ()->
 		process.stdout.write color('  \u2713 \n', "green")
 		callback()
-	# upload_params = "token=#{token}"
-	# upload_connection_param =
-	# 	method: "PUT"
-	# 	host: 'forio.com'
-	# 	path: "/simulate/api/file/#{options.sim_path}"
-	# 	headers:
-	# 		'Content-Type': 'multipart/form-data'
-
-	# curl = spawn "curl", ["--progress-bar", "-L", "-F", "token=#{token}", "-F", "content=@#{__dirname}/archive.zip", "-F", "unzip=true", file_url]
-
-	# curl.stdout.on "data", ()->
-	# 	console.log "read"
-	# 	curl.kill('SIGTERM');
-
-	# curl.stdout.on "end", ()->
-	# 	console.log "end"
-	# 	curl.kill('SIGTERM');
 
 exec "rm #{__dirname}/archive.zip", ()->
-	exec "zip -r #{__dirname}/archive.zip . -x@#{__dirname}/exclude.lst", {cwd: options.watch_dir}, ()->
+	exec "zip -r #{__dirname}/archive.zip . -x@#{__dirname}/exclude.lst", {cwd: options.local_dir}, ()->
 		console.log ""
 		getToken (token)->
 			uploadFile token, ()->

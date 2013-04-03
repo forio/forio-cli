@@ -1,41 +1,41 @@
-fs = (require "fs")
+#!/usr/bin/env coffee
 
-options = (require 'optimist')
-    .usage("Watches for changes on provided directory and uploads to simulate")
-    .options("c", {
-        alias: "config_file"
+fs = (require "fs")
+optimist = (require 'optimist')
+
+options = optimist.usage("Watches for changes on provided directory and uploads to simulate",
+    "config_file":
+        short: "c"
         describe: "Path to config file"
         default: __dirname + "/config.json"
-    })
-    .options("w", {
-        alias: "watch_dir"
-        describe: "Directory to watch. Defaults to current."
-        default: process.cwd()
-    })
-    .options("s", {
-        alias: "sim_path"
-        describe: "Path to simulation in author/sim_path format"
-        demand: true
-    })
-    .options("i", {
-        alias: "ignore"
+    "ignore":
+        short: "i"
         describe: "Regex with pattern of files to ignore for sync"
-    })
-    .argv
+    ).argv
 
-
-# console.log "file", options
+if !options._.length or !options._[0]
+    optimist.showHelp()
+    process.kill 'SIGTERM'
 
 ##Read creds from config
 data = fs.readFileSync(options.config_file)
 dataObj = JSON.parse(data)
 
+firstParam = options._[0].split(' ')[0].trim() ## directory:server_path
+
+#Assume local dir by default
+if firstParam.indexOf(':') is -1
+    options.local_dir = process.cwd()
+    options.sim_path = firstParam
+else
+    [options.local_dir, options.sim_path] = firstParam.split(':')
+
+#Add trailing slash if not provided
+options.local_dir += "/" if options.local_dir.charAt(options.local_dir.length - 1) isnt "/"
+#Assume current author by default
+options.sim_path = "#{dataObj.user_name}/#{options.sim_path}"  if options.sim_path.indexOf('/') is -1
+
 options.ftp_user = dataObj.user_name
 options.password = dataObj.password
-
-#Assume current author by default
-if options.sim_path.indexOf('/') is -1 then  options.sim_path = "#{dataObj.user_name}" + "/" + options.sim_path.trim()
-#Add trailing slash if not provided
-if options.watch_dir.charAt(options.watch_dir.length - 1) != "/" then  options.watch_dir = "#{options.watch_dir}/"
 
 exports.options = options
