@@ -5,6 +5,8 @@ color = (require "ansi-color").set
 fs = (require 'fs')
 
 authenticate = (require '../util/authenticate').authenicate
+uploader = (require '../util/upload')
+
 options = (require '../options').options
 
 die = ()-> process.kill('SIGTERM')
@@ -23,9 +25,7 @@ getToken = (callback)->
 
 uploadFile = (token, callback) ->
 	process.stdout.write "Uploading to #{options.sim_path}....."
-
-	file_url = "forio.com/simulate/api/file/#{options.sim_path}"
-	exec "curl --progress-bar -L -F token=#{token} -F content=@#{basePath}/archive.zip -F method=PUT -F unzip=true #{file_url}", ()->
+	uploader.uploadZip "#{basePath}/archive.zip", options.sim_path, token, ()->
 		process.stdout.write color('  \u2713 \n', "green")
 		callback()
 
