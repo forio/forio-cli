@@ -4,8 +4,8 @@ spawn  = (require 'child_process').spawn
 color = (require "ansi-color").set
 fs = (require 'fs')
 
-authenticate = (require './authenticate').authenicate
-options = (require './options').options
+authenticate = (require '../util/authenticate').authenicate
+options = (require '../options').options
 
 die = ()-> process.kill('SIGTERM')
 

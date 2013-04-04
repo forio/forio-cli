@@ -3,8 +3,8 @@ chokidar = (require "chokidar")
 exec  = (require 'child_process').exec
 color = (require "ansi-color").set
 
-options = (require './options').options
-authenticate = (require './authenticate').authenicate
+options = (require '../options').options
+authenticate = (require '../util/authenticate').authenicate
 
 token = ""
 die = ()-> process.kill('SIGTERM')

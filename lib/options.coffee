@@ -7,13 +7,13 @@ options = optimist.usage(" local_path:<sim_author>/<sim_path>",
     "config_file":
         short: "c"
         describe: "Path to config file"
-        default: __dirname + "/config.json"
+        default: __dirname + "/../config.json"
     "ignore":
         short: "i"
         describe: "Regex with pattern of files to ignore for sync"
     ).argv
 
-if !options._.length or !options._[0]
+if options._.length < 1 or !options._[1]
     optimist.showHelp()
     process.kill 'SIGTERM'
 
