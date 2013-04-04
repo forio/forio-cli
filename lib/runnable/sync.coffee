@@ -1,10 +1,11 @@
 #!/usr/bin/env coffee
+
 chokidar = (require "chokidar")
-exec  = (require 'child_process').exec
 color = (require "ansi-color").set
 
-options = (require '../options').options
-authenticate = (require '../util/authenticate').authenicate
+authenticate = (require "../util/authenticate").authenicate
+options = (require "../options").options
+uploader = (require "../util/upload")
 
 token = ""
 die = ()-> process.kill('SIGTERM')
@@ -27,14 +28,11 @@ watch = ()->
         ignoreInitial: true
         persistent: true
 
-    scpUpload = (path_to_file, stats) ->
-        list = path_to_file.split('/')
-        folder = if list.length > 1 then list[0..(list.length - 2)].join('/') else ''
-
-        serverPath = path_to_file.replace(options.local_dir, '')
+    scpUpload = (localPath, stats) ->
+        serverPath = localPath.replace(options.local_dir, '')
         simPath = "#{options.sim_path}/#{serverPath}"
 
-        exec "#{__dirname}/../../upload.sh #{path_to_file} #{simPath} #{options.ftp_user} #{options.password}", (err, stdout, stderr) ->
+        uploader.uploadFile localPath, simPath, options.ftp_user, options.password, (err, stdout, stderr) ->
             if err or stderr
                 console.error color(err, "red"), stderr, stdout
             else
