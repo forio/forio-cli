@@ -3,7 +3,7 @@
 fs = (require "fs")
 optimist = (require 'optimist')
 
-options = optimist.usage("Watches for changes on provided directory and uploads to simulate",
+options = optimist.usage(" local_path:<sim_author>/<sim_path>",
     "config_file":
         short: "c"
         describe: "Path to config file"

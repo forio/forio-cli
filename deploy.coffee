@@ -4,44 +4,26 @@ spawn  = (require 'child_process').spawn
 color = (require "ansi-color").set
 fs = (require 'fs')
 
+authenticate = (require './authenticate').authenicate
 options = (require './options').options
-http = require 'http'
 
 die = ()-> process.kill('SIGTERM')
+
 getToken = (callback)->
-	process.stdout.write "Authenticating as #{options.ftp_user}................"
-	auth_params = "user_action=login&email=#{options.ftp_user}&password=#{options.password}"
-	login_connection_param =
-		host: 'forio.com'
-		path: "/simulate/api/authentication/#{options.sim_path}"
-		method: 'POST'
-		headers:
-		  'Content-Type': 'application/x-www-form-urlencoded'
-		  'Content-Length': auth_params.length
-
-	auth_request = http.request login_connection_param, (response) ->
-		stack  = ""
-		response.on "data", (payload) ->
-			stack += payload
-
-		response.on "end", ()->
-			response = (JSON.parse stack)
-
-			if !response.token
-				process.stdout.write color('  \u2716 \n', "red")
-				console.error color(response.status_code + ":", "red+bold"), response.message
-				die()
-			else
-				process.stdout.write color('  \u2713 \n', "green")
-				callback(response.token)
-
-	auth_request.write auth_params
-	auth_request.end()
+	process.stdout.write "Authenticating as #{userName}................"
+	authenticate options.ftp_user, options.password, options.sim_path, (response)->
+		if !response.token
+			process.stdout.write color('  \u2716 \n', "red")
+			console.error color(response.status_code + ":", "red+bold"), response.message
+			die()
+		else
+			process.stdout.write color('  \u2713 \n', "green")
+			callback(response.token)
 
 uploadFile = (token, callback) ->
-	file_url = "forio.com/simulate/api/file/#{options.sim_path}"
-
 	process.stdout.write "Uploading to #{options.sim_path}....."
+
+	file_url = "forio.com/simulate/api/file/#{options.sim_path}"
 	exec "curl --progress-bar -L -F token=#{token} -F content=@#{__dirname}/archive.zip -F method=PUT -F unzip=true #{file_url}", ()->
 		process.stdout.write color('  \u2713 \n', "green")
 		callback()
