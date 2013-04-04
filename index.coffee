@@ -1,17 +1,30 @@
 #!/usr/bin/env coffee
 
-fs = (require "fs")
-optimist = (require 'optimist')
+parser = require("nomnom");
 
-options = optimist.usage(" local_path:<sim_author>/<sim_path>").argv
+parser.command('browser')
+   .callback((opts)->
+      console.log(opts.url);
+   )
+   .help("run browser tests");
 
-if !options._.length or !options._[0]
-    optimist.showHelp()
-    process.kill 'SIGTERM'
+parser
+    .command('deploy')
+    .help('deploy to forio.com')
+    .options(
+        mapping:
+            position: 0
+            required: true
+            help: "local_path:<sim_author>/<sim_path>"
+        config_file:
+            abbr: "c"
+            help: "Path to config file with sftp creds"
+            default: __dirname + "/config.json"
+    )
+    .callback( (opts)->
+      console.log(opts);
+    )
 
-file = options._[0].split(" ")[0]
-runnable = require("./lib/runnable/#{file}")
+parser.parse();
 
-module.exports =
-
-
+# console.log parser

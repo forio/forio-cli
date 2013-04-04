@@ -8,9 +8,10 @@ authenticate = (require '../util/authenticate').authenicate
 options = (require '../options').options
 
 die = ()-> process.kill('SIGTERM')
+basePath = __dirname + "/../.."
 
 getToken = (callback)->
-	process.stdout.write "Authenticating as #{userName}................"
+	process.stdout.write "Authenticating as #{options.ftp_user}................"
 	authenticate options.ftp_user, options.password, options.sim_path, (response)->
 		if !response.token
 			process.stdout.write color('  \u2716 \n', "red")
@@ -24,7 +25,7 @@ uploadFile = (token, callback) ->
 	process.stdout.write "Uploading to #{options.sim_path}....."
 
 	file_url = "forio.com/simulate/api/file/#{options.sim_path}"
-	exec "curl --progress-bar -L -F token=#{token} -F content=@#{__dirname}/archive.zip -F method=PUT -F unzip=true #{file_url}", ()->
+	exec "curl --progress-bar -L -F token=#{token} -F content=@#{basePath}/archive.zip -F method=PUT -F unzip=true #{file_url}", ()->
 		process.stdout.write color('  \u2713 \n', "green")
 		callback()
 
@@ -39,16 +40,16 @@ confirm = (str, onYes)->
     	die()
 
 authenticateAndUpload = ()->
-	exec "rm #{__dirname}/archive.zip", ()->
-		exec "zip -r #{__dirname}/archive.zip . -x@#{__dirname}/exclude.lst", {cwd: options.local_dir}, ()->
+	exec "rm #{basePath}/archive.zip", ()->
+		exec "zip -r #{basePath}/archive.zip . -x@#{basePath}/exclude.lst", {cwd: options.local_dir}, ()->
 			console.log ""
 			getToken (token)->
 				uploadFile token, ()->
-					st = fs.statSync("#{__dirname}/archive.zip")
+					st = fs.statSync("#{basePath}/archive.zip")
 					sizeInMB = (st.size / (1024 * 1024)).toFixed(2)
 
 					console.log ""
-					console.log "Uploaded", color(sizeInMB + "MB", "bold+white"), "to", color(options.sim_path, "bold+white")
+					console.log "Uploaded", color(sizeInMB + "MB", "bold+white"), "to", color(options.sim_path, "bold+white"), "in", process.uptime(), "seconds"
 
 					die()
 

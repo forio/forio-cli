@@ -13,7 +13,7 @@ options = optimist.usage(" local_path:<sim_author>/<sim_path>",
         describe: "Regex with pattern of files to ignore for sync"
     ).argv
 
-if options._.length < 1 or !options._[1]
+if !options._.length  or !options._[0]
     optimist.showHelp()
     process.kill 'SIGTERM'
 

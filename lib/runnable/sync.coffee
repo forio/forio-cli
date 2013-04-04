@@ -34,7 +34,7 @@ watch = ()->
         serverPath = path_to_file.replace(options.local_dir, '')
         simPath = "#{options.sim_path}/#{serverPath}"
 
-        exec "#{__dirname}/upload.sh #{path_to_file} #{simPath} #{options.ftp_user} #{options.password}", (err, stdout, stderr) ->
+        exec "#{__dirname}/../../upload.sh #{path_to_file} #{simPath} #{options.ftp_user} #{options.password}", (err, stdout, stderr) ->
             if err or stderr
                 console.error color(err, "red"), stderr, stdout
             else

@@ -4,6 +4,7 @@
     "ansi-color": "~0.2.1",
     "optimist": "~0.3.5",
     "progress": "~0.1.0",
-    "commander": "~1.1.1"
+    "commander": "~1.1.1",
+    "nomnom": "~1.6.0"
   }
 }
