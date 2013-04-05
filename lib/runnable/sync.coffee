@@ -7,10 +7,9 @@ authenticate = (require "../util/authenticate").authenicate
 options = (require "../options").options
 uploader = (require "../util/upload")
 
-token = ""
 die = ()-> process.kill('SIGTERM')
 
-watch = ()->
+watch = (token)->
     console.log ""
     console.log "Watching", color(options.local_dir, "white_bg+black") ,"for changes.."
     console.log ""
@@ -28,18 +27,26 @@ watch = ()->
         ignoreInitial: true
         persistent: true
 
-    scpUpload = (localPath, stats) ->
+    upload = (localPath, stats) ->
         serverPath = localPath.replace(options.local_dir, '')
         simPath = "#{options.sim_path}/#{serverPath}"
 
-        uploader.uploadFile localPath, simPath, options.ftp_user, options.password, (err, stdout, stderr) ->
-            if err or stderr
-                console.error color(err, "red"), stderr, stdout
-            else
-                console.log serverPath, color("\u2192", "cyan"), "#{simPath}"
+        time = process.hrtime()
+        uploader.uploadFileAPI localPath, simPath, token, (err, stdout, stderr) ->
+            diff = process.hrtime time
+            formattedDiff = ((diff[0] * 1e9 + diff[1]) / 1000000).toFixed(0)
 
-    watcher.on "change", scpUpload
-    watcher.on "add", scpUpload
+            response = JSON.parse stdout
+            if +response.status_code is 201
+                console.log serverPath, color("\u2192", "cyan"), "#{simPath}", "   #{formattedDiff}ms"
+            else if response.message
+                console.error color(response.message, "red")
+            else
+                console.error color(err, "red"), stderr, stdout
+
+
+    watcher.on "change", upload
+    watcher.on "add", upload
     watcher.close()
 
 ##Authenticating to make sure wherever you're writing to exists
