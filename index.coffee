@@ -17,6 +17,7 @@ files.forEach (file) ->
         .callback(module.run)
 
 options = parser.parse();
+# console.log parser.getUsage()
 
         # console.log file
 # parser

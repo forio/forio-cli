@@ -11,7 +11,6 @@ uploader = (require "../util/upload")
 die = ()-> process.kill('SIGTERM')
 
 watch = (local, remote, token, ignored)->
-    console.log ""
     console.log "Watching", color(local, "white_bg+black") ,"for changes.."
     console.log ""
 
