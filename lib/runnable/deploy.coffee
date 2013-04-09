@@ -61,7 +61,6 @@ exports.options =
 
 exports.run = (options)->
     [local, remote] = op.parseMapping options.mapping
-
     [userName, pass] = op.getCreds options.config_file
 
     #Assume current author by default

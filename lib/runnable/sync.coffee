@@ -5,22 +5,23 @@ color = (require "ansi-color").set
 
 authenticate = (require "../util/authenticate").authenicate
 # options = (require "../options").options
+op = (require '../util/optionsParser')
 uploader = (require "../util/upload")
 
 die = ()-> process.kill('SIGTERM')
 
-watch = (token)->
+watch = (local, remote, token, ignored)->
     console.log ""
-    console.log "Watching", color(options.local_dir, "white_bg+black") ,"for changes.."
+    console.log "Watching", color(local, "white_bg+black") ,"for changes.."
     console.log ""
 
-    watcher = chokidar.watch options.local_dir,
+    watcher = chokidar.watch local,
         ignored: (item) ->
             ignored_extensions = /\.(less|git|coffee|tmpl|DS_Store)/i
             ignored_directories = /node_modules/i
             ignored_files = /grunt.js|cakefile/i
 
-            ignore = item.match(ignored_extensions) or item.match(ignored_directories) or item.match(ignored_files) or (options.ignore and items.match(options.ignore))
+            ignore = item.match(ignored_extensions) or item.match(ignored_directories) or item.match(ignored_files) or (ignored and items.match(ignored))
             # if ignore then console.log item, ignore
             return ignore
 
@@ -28,8 +29,8 @@ watch = (token)->
         persistent: true
 
     upload = (localPath, stats) ->
-        serverPath = localPath.replace(options.local_dir, '')
-        simPath = "#{options.sim_path}/#{serverPath}"
+        serverPath = localPath.replace(local, '')
+        simPath = "#{remote}/#{serverPath}"
 
         time = process.hrtime()
         uploader.uploadFileAPI localPath, simPath, token, (err, stdout, stderr) ->
@@ -54,9 +55,9 @@ watch = (token)->
     watcher.on "add", upload
     watcher.close()
 
-authenicateUser = (callback)->
+authenicateUser = (user, pass, remote, callback)->
     ##Authenticating to make sure wherever you're writing to exists
-    authenticate options.ftp_user, options.password, options.sim_path, (response)->
+    authenticate user, pass, remote, (response)->
         if !response.token
             console.error color(response.message, "red+bold")
             die()
@@ -66,9 +67,30 @@ authenicateUser = (callback)->
 # authenicateUser watch
 
 
-exports.help = "deploy files to simulate"
+exports.help = "Watch dir for changes and upload to sim"
 
-exports.options = {}
+exports.options =
+    mapping:
+        abbr: "m"
+        position: 1
+        required: true
+        help: "<local_dir>:<sim_author>/<sim_name>"
+    config_file:
+        abbr: "c"
+        help: "Path to config file"
+        default: __dirname + "/../../config.json"
+    ignore:
+        abbr: "i"
+        help: "Regex with pattern of files to ignore for sync"
 
-exports.run = ()->
+exports.run = (options)->
+    [local, remote] = op.parseMapping options.mapping
+    [userName, pass] = op.getCreds options.config_file
+
+    #Assume current author by default
+    remote = "#{userName}/#{remote}"  if remote.indexOf('/') is -1
+
     console.log ""
+
+    authenicateUser userName, pass, remote, (token)->
+        watch(local, remote, token)
