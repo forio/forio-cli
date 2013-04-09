@@ -6,7 +6,7 @@ parser = require("nomnom");
 parser.options
     mapping:
         abbr: "m"
-        position: 0
+        position: 1
         required: true
         help: "<local_dir>:<sim_author>/<sim_name>"
     config_file:
@@ -18,6 +18,10 @@ parser.options
         help: "Regex with pattern of files to ignore for sync"
 
 options = parser.parse()
+
+if !options.mapping
+    console.log parser.getUsage()
+    process.kill('SIGTERM')
 
 ##Read creds from config
 data = fs.readFileSync(options.config_file)

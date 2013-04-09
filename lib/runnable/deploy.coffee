@@ -7,14 +7,17 @@ fs = (require 'fs')
 authenticate = (require '../util/authenticate').authenicate
 uploader = (require '../util/upload')
 
-options = (require '../options').options
+# options = (require '../options').options
+op = (require '../util/optionsParser')
 
-die = ()-> process.kill('SIGTERM')
+#Path to root
 basePath = __dirname + "/../.."
 
-getToken = (callback)->
-	process.stdout.write "Authenticating as #{options.ftp_user}................"
-	authenticate options.ftp_user, options.password, options.sim_path, (response)->
+die = ()-> process.kill('SIGTERM')
+
+getToken = (user, password, remote, callback)->
+	process.stdout.write "Authenticating as #{user}................"
+	authenticate user, password, remote, (response)->
 		if !response.token
 			process.stdout.write color('  \u2716 \n', "red")
 			console.error color(response.status_code + ":", "red+bold"), response.message
@@ -23,9 +26,9 @@ getToken = (callback)->
 			process.stdout.write color('  \u2713 \n', "green")
 			callback(response.token)
 
-uploadFile = (token, callback) ->
-	process.stdout.write "Uploading to #{options.sim_path}....."
-	uploader.uploadZip "#{basePath}/archive.zip", options.sim_path, token, ()->
+uploadFile = (token, remote, callback) ->
+	process.stdout.write "Uploading to #{remote}....."
+	uploader.uploadZip "#{basePath}/archive.zip", remote, token, ()->
 		process.stdout.write color('  \u2713 \n', "green")
 		callback()
 
@@ -39,19 +42,43 @@ confirm = (str, onYes)->
     else
     	die()
 
-authenticateAndUpload = ()->
-	exec "rm #{basePath}/archive.zip", ()->
-		exec "zip -r #{basePath}/archive.zip . -x@#{basePath}/exclude.lst", {cwd: options.local_dir}, ()->
-			console.log ""
-			getToken (token)->
-				uploadFile token, ()->
-					st = fs.statSync("#{basePath}/archive.zip")
-					sizeInMB = (st.size / (1024 * 1024)).toFixed(2)
+createTempZip = (local, tempFile, callback) ->
+    exec "rm #{tempFile}", ()->
+        exec "zip -r #{tempFile} . -x@#{basePath}/exclude.lst", {cwd: local}, callback
 
-					console.log ""
-					console.log "Uploaded", color(sizeInMB + "MB", "bold+white"), "to", color(options.sim_path, "bold+white"), "in", process.uptime(), "seconds"
+exports.help = "deploy files to simulate"
 
-					die()
+exports.options =
+    mapping:
+        abbr: "m"
+        position: 1
+        required: true
+        help: "<local_dir>:<sim_author>/<sim_name>"
+    config_file:
+        abbr: "c"
+        help: "Path to config file"
+        default: __dirname + "/../../config.json"
 
-console.log ""
-confirm "Are you sure you want to deploy " +  color(options.local_dir, "white") + " to " + color(options.sim_path, "white") + "?", authenticateAndUpload
+exports.run = (options)->
+    [local, remote] = op.parseMapping options.mapping
+
+    [userName, pass] = op.getCreds options.config_file
+
+    #Assume current author by default
+    remote = "#{userName}/#{remote}"  if remote.indexOf('/') is -1
+
+    tempFile = "#{basePath}/archive.zip"
+
+    console.log ""
+    confirm "Are you sure you want to deploy " +  color(local, "white") + " to " + color(remote, "white") + "?", ()->
+        createTempZip local, tempFile, ()->
+            getToken userName, pass, remote, (token)->
+                uploadFile token, remote, ()->
+                    st = fs.statSync(tempFile)
+                    sizeInMB = (st.size / (1024 * 1024)).toFixed(2)
+
+                    console.log ""
+                    console.log "Uploaded", color(sizeInMB + "MB", "bold+white"), "to", color(remote, "bold+white"), "in", process.uptime(), "seconds"
+
+                    die()
+

@@ -4,7 +4,7 @@ chokidar = (require "chokidar")
 color = (require "ansi-color").set
 
 authenticate = (require "../util/authenticate").authenicate
-options = (require "../options").options
+# options = (require "../options").options
 uploader = (require "../util/upload")
 
 die = ()-> process.kill('SIGTERM')
@@ -63,4 +63,12 @@ authenicateUser = (callback)->
         else
             callback(response.token)
 
-authenicateUser watch
+# authenicateUser watch
+
+
+exports.help = "deploy files to simulate"
+
+exports.options = {}
+
+exports.run = ()->
+    console.log ""
