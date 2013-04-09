@@ -2,28 +2,28 @@
 
 parser = require("nomnom");
 
-parser.command('browser')
-   .callback((opts)->
-      console.log(opts.url);
-   )
-   .help("run browser tests");
+parser
+    .script("F")
+
+parser
+    .command('sync')
+    .help('Auto-upload local changes to remote sim')
+    .options
+        ignore:
+            abbr: "i"
+            help: "Regex pattern to ignore for sync. Usual suspects (.*, Cakefile..) done by default"
+
+    .callback (opts)->
+        if opts._.length <= 1
+            console.log parser.getUsage()
 
 parser
     .command('deploy')
-    .help('deploy to forio.com')
-    .options(
-        mapping:
-            position: 0
-            required: true
-            help: "local_path:<sim_author>/<sim_path>"
-        config_file:
-            abbr: "c"
-            help: "Path to config file with sftp creds"
-            default: __dirname + "/config.json"
-    )
-    .callback( (opts)->
-      console.log(opts);
-    )
+    .help('Deploy local dir to Simulate')
+    .callback (opts)->
+        require("./lib/runnable/#{opts._[0]}")
+
+      # console.log(opts);
 
 parser.parse();
 

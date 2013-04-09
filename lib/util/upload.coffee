@@ -8,7 +8,7 @@ uploadFile = (localPath, simPath, user, password, callback)->
 
 uploadFileAPI = (localPath, simPath, token, callback)->
 	file_url = "forio.com/simulate/api/file/#{simPath}"
-	exec "curl --progress-bar -L -F token=#{token} -F content=@#{localPath} -F method=PUT #{file_url}", callback
+	exec "curl --silent -L -F token=#{token} -F content=@#{localPath} -F method=PUT #{file_url}", callback
 
 uploadZip = (localPath, simPath, token, callback)->
 	file_url = "forio.com/simulate/api/file/#{simPath}"

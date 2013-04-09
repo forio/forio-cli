@@ -13,13 +13,18 @@ options = optimist.usage(" local_path:<sim_author>/<sim_path>",
         describe: "Regex with pattern of files to ignore for sync"
     ).argv
 
-if !options._.length  or !options._[0]
+
+# console.log options
+
+optionIndex = 0
+if options._.length <= optionIndex  or !options._[optionIndex]
     optimist.showHelp()
     process.kill 'SIGTERM'
 
 ##Read creds from config
 data = fs.readFileSync(options.config_file)
 dataObj = JSON.parse(data)
+
 
 firstParam = options._[0].split(' ')[0].trim() ## directory:server_path
 

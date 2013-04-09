@@ -39,8 +39,13 @@ watch = (token)->
             response = JSON.parse stdout
             if +response.status_code is 201
                 console.log serverPath, color("\u2192", "cyan"), "#{simPath}", "   #{formattedDiff}ms"
+            else if +response.status_code is 401
+                console.log "Timed out. Reconnecting.."
+                authenicateUser (newtoken)->
+                    token = newtoken
+                    upload localPath, stats
             else if response.message
-                console.error color(response.message, "red")
+                console.error color(response.status_code + ":", "red"), response.message
             else
                 console.error color(err, "red"), stderr, stdout
 
@@ -49,10 +54,13 @@ watch = (token)->
     watcher.on "add", upload
     watcher.close()
 
-##Authenticating to make sure wherever you're writing to exists
-authenticate options.ftp_user, options.password, options.sim_path, (response)->
-    if !response.token
-        console.error color(response.message, "red+bold")
-        die()
-    else
-        watch(response.token)
+authenicateUser = (callback)->
+    ##Authenticating to make sure wherever you're writing to exists
+    authenticate options.ftp_user, options.password, options.sim_path, (response)->
+        if !response.token
+            console.error color(response.message, "red+bold")
+            die()
+        else
+            callback(response.token)
+
+authenicateUser watch
