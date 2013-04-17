@@ -1,14 +1,14 @@
 #!/usr/bin/env coffee
-fs = (require 'fs')
-parser = require("nomnom");
+fs =  require "fs"
+parser = require "nomnom"
 
-parser
-    .script("F")
+parser.script "F"
+pluginsDir = "#{__dirname}/lib/runnable"
 
-files = fs.readdirSync "#{__dirname}/lib/runnable"
+files = fs.readdirSync pluginsDir
 files.forEach (file) ->
-    moduleName = file.split('.')[0]
-    module = require("#{__dirname}/lib/runnable/#{moduleName}")
+    [moduleName] = file.split "."
+    module = require "#{pluginsDir}/#{moduleName}"
 
     parser
         .command(moduleName)
@@ -16,21 +16,4 @@ files.forEach (file) ->
         .options(module.options)
         .callback(module.run)
 
-options = parser.parse();
-# console.log parser.getUsage()
-
-        # console.log file
-# parser
-#     .command('sync')
-#     .help('Auto-upload local changes to remote sim')
-
-# parser
-#     .command('deploy')
-#     .help('Deploy local dir to Simulate')
-#     .callback (opts)->
-#         require("./lib/runnable/#{opts._[0]}")
-
-#       # console.log(opts);
-
-
-# console.log parser
+options = parser.parse()

@@ -1,19 +1,19 @@
 #!/usr/bin/env coffee
-exec  = (require 'child_process').exec
-spawn  = (require 'child_process').spawn
+exec  = (require "child_process").exec
 color = (require "ansi-color").set
-fs = (require 'fs')
+fs = (require "fs")
 
-authenticate = (require '../util/authenticate').authenicate
-uploader = (require '../util/upload')
+authenticate = (require "../util/authenticate").authenicate
+uploader = (require "../util/upload")
 
-# options = (require '../options').options
-op = (require '../util/optionsParser')
+# options = (require "../options").options
+op = (require "../util/optionsParser")
 
 #Path to root
 basePath = __dirname + "/../.."
 
-die = ()-> process.kill('SIGTERM')
+options = {}
+die = ()-> process.kill("SIGTERM")
 
 getToken = (user, password, remote, callback)->
 	process.stdout.write "Authenticating as #{user}................"
@@ -33,9 +33,9 @@ uploadFile = (token, remote, callback) ->
 		callback()
 
 confirm = (str, onYes)->
-  process.stdout.write str + " (Y/n) "
-  process.stdin.setEncoding 'utf8'
-  process.stdin.once 'data', (val)->
+  process.stdout.write "#{str} (Y/n) "
+  process.stdin.setEncoding "utf8"
+  process.stdin.once "data", (val)->
     if val.trim() == "Y"
     	process.stdin.resume()
     	onYes()
@@ -60,16 +60,17 @@ exports.options =
         default: __dirname + "/../../config.json"
 
 exports.run = (options)->
+    console.log ""
+
     [local, remote] = op.parseMapping options.mapping
     [userName, pass] = op.getCreds options.config_file
 
     #Assume current author by default
-    remote = "#{userName}/#{remote}"  if remote.indexOf('/') is -1
+    remote = "#{userName}/#{remote}"  if remote.indexOf("/") is -1
 
     tempFile = "#{basePath}/archive.zip"
 
-    console.log ""
-    confirm "Are you sure you want to deploy " +  color(local, "white") + " to " + color(remote, "white") + "?", ()->
+    confirm "Are you sure you want to deploy " +  (color local, "white") + " to " + (color remote, "white") + "?", ()->
         createTempZip local, tempFile, ()->
             getToken userName, pass, remote, (token)->
                 uploadFile token, remote, ()->
