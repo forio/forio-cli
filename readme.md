@@ -8,9 +8,10 @@ Forio CLI is both a set of tools to ease your worflow for working with simulatio
     $ npm install
     $ chmod +x index.coffee
     $ alias F='your/path/index.coffee'
+    $ mv config.json.dummy config.json #Use this to manage creds until SIMULATE-6036 is fixed
 
 ## Commands
-Commands are high-level actions you're allowed to perform. Each command can take it it's own optional parameters. Invoking the command without specifying any of the default options prints out the useage. The following commands are currently supported
+Commands are high-level actions you're allowed to perform. Each command can define its own optional parameters. Invoking the command without specifying any of the required options prints out the usage. The following commands are currently supported
 
     Usage: F <command>
 
