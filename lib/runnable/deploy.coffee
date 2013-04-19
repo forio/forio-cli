@@ -36,7 +36,7 @@ confirm = (str, onYes)->
   process.stdout.write "#{str} (Y/n) "
   process.stdin.setEncoding "utf8"
   process.stdin.once "data", (val)->
-    if val.trim() == "Y"
+    if val.trim() is "Y"
     	process.stdin.resume()
     	onYes()
     else
@@ -46,7 +46,7 @@ createTempZip = (local, tempFile, callback) ->
     exec "rm #{tempFile}", ()->
         exec "zip -r #{tempFile} . -x@#{basePath}/exclude.lst", {cwd: local}, callback
 
-exports.help = "deploy files to simulate"
+exports.help = "Deploy files to a simulation."
 
 exports.options =
     mapping:

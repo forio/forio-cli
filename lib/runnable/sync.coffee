@@ -71,7 +71,7 @@ authenicateUser = (callback, conf = config)->
             (callback response.token, conf)
 
 
-exports.help = "Watch dir for changes and upload to sim"
+exports.help = "Watch dir for changes and upload to simulation"
 
 exports.options =
     mapping:
