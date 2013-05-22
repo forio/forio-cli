@@ -12,7 +12,7 @@ uploadFileAPI = (localPath, simPath, token, callback)->
 
 uploadZip = (localPath, simPath, token, callback)->
 	file_url = "forio.com/simulate/api/file/#{simPath}"
-	exec "curl --progress-bar -L -F token=#{token} -F content=@#{localPath} -F method=PUT -F unzip=true #{file_url}", callback
+	exec "curl -L -F token=#{token} -F content=@#{localPath} -F method=PUT -F unzip=true #{file_url}", callback
 
 exports.uploadFile = uploadFile
 exports.uploadFileAPI = uploadFileAPI

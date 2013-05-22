@@ -29,6 +29,7 @@ getToken = (user, password, remote, callback)->
 uploadFile = (token, remote, callback) ->
 	process.stdout.write "Uploading to #{remote}....."
 	uploader.uploadZip "#{basePath}/archive.zip", remote, token, ()->
+		# console.log arguments
 		process.stdout.write color('  \u2713 \n', "green")
 		callback()
 
