@@ -64,16 +64,16 @@ exports.run = (options)->
     console.log ""
 
     [local, remote] = op.parseMapping options.mapping
-    [userName, pass] = op.getCreds options.config_file
+    {user_name, password} = (require options.config_file)
 
     #Assume current author by default
-    remote = "#{userName}/#{remote}"  if remote.indexOf("/") is -1
+    remote = "#{user_name}/#{remote}"  if remote.indexOf("/") is -1
 
     tempFile = "#{basePath}/archive.zip"
 
     confirm "Are you sure you want to deploy " +  (color local, "white") + " to " + (color remote, "white") + "?", ()->
         createTempZip local, tempFile, ()->
-            getToken userName, pass, remote, (token)->
+            getToken user_name, password, remote, (token)->
                 uploadFile token, remote, ()->
                     st = fs.statSync(tempFile)
                     sizeInMB = (st.size / (1024 * 1024)).toFixed(2)
