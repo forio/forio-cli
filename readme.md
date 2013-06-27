@@ -25,6 +25,7 @@ Commands are high-level actions you're allowed to perform. Each command can defi
 
     Options:
        -c, --config_file   Path to config file  [~/../../config.json]
+       -d, --domain        domain simulate is hosted on  [forio.com]
 
     Deploy files to a simulation
 
@@ -38,6 +39,7 @@ This will ask for a confirmation before deploying, and also make sure the path y
     Options:
        -c, --config_file   Path to config file  [/Users/narenranjit/FPrjs/scripts/lib/runnable/../../config.json]
        -i, --ignore        Regex with pattern of files to ignore for sync
+       -d, --domain        domain simulate is hosted on  [forio.com]
 
     Watch dir for changes and upload to simulation
 
