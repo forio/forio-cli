@@ -2,13 +2,6 @@
 
 fs = (require "fs")
 
-##Read creds from config
-exports.getCreds = (config_file)->
-    data = fs.readFileSync(config_file)
-    dataObj = JSON.parse(data)
-
-    return [dataObj.user_name, dataObj.password]
-
 exports.parseMapping = (mapping)->
     #Assume local dir by default
     if mapping.indexOf(':') is -1

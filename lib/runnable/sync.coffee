@@ -89,15 +89,16 @@ exports.options =
 
 exports.run = (options)->
     [local, remote] = op.parseMapping options.mapping
-    [userName, pass] = op.getCreds options.config_file
+
+    {user_name, password} = (require options.config_file)
 
     #Assume current author by default
-    remote = "#{userName}/#{remote}"  if remote.indexOf('/') is -1
+    remote = "#{user_name}/#{remote}"  if remote.indexOf('/') is -1
 
     config =
         local: local
         remote: remote
-        user: userName
-        pass: pass
+        user: user_name
+        pass: password
 
     authenicateUser watch
