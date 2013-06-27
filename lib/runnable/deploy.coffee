@@ -12,12 +12,12 @@ op = (require "../util/optionsParser")
 #Path to root
 basePath = __dirname + "/../.."
 
-options = {}
+config = {}
 die = ()-> process.kill("SIGTERM")
 
-getToken = (user, password, remote, callback)->
-	process.stdout.write "Authenticating as #{user}................"
-	authenticate user, password, remote, (response)->
+getToken = (callback)->
+	process.stdout.write "Authenticating as #{config.user}................"
+	authenticate config.user, config.pass, config.domain, config.remote, (response)->
 		if !response.token
 			process.stdout.write color('  \u2716 \n', "red")
 			console.error color(response.status_code + ":", "red+bold"), response.message
@@ -26,9 +26,9 @@ getToken = (user, password, remote, callback)->
 			process.stdout.write color('  \u2713 \n', "green")
 			callback(response.token)
 
-uploadFile = (token, remote, callback) ->
-	process.stdout.write "Uploading to #{remote}....."
-	uploader.uploadZip "#{basePath}/archive.zip", remote, token, ()->
+uploadFile = (token, callback) ->
+	process.stdout.write "Uploading to #{config.remote}....."
+	uploader.uploadZip config.domain, "#{basePath}/archive.zip", config.remote, token, ()->
 		# console.log arguments
 		process.stdout.write color('  \u2713 \n', "green")
 		callback()
@@ -59,6 +59,10 @@ exports.options =
         abbr: "c"
         help: "Path to config file"
         default: __dirname + "/../../config.json"
+    domain:
+        abbr: "d"
+        default: "forio.com"
+        help: "domain simulate is hosted on"
 
 exports.run = (options)->
     console.log ""
@@ -69,12 +73,21 @@ exports.run = (options)->
     #Assume current author by default
     remote = "#{user_name}/#{remote}"  if remote.indexOf("/") is -1
 
+    options.domain = "qa.forio.com" if options.domain is "qa"
+
     tempFile = "#{basePath}/archive.zip"
+
+    config =
+        local: local
+        remote: remote
+        user: user_name
+        pass: password
+        domain: options.domain
 
     confirm "Are you sure you want to deploy " +  (color local, "white") + " to " + (color remote, "white") + "?", ()->
         createTempZip local, tempFile, ()->
-            getToken user_name, password, remote, (token)->
-                uploadFile token, remote, ()->
+            getToken (token)->
+                uploadFile token, ()->
                     st = fs.statSync(tempFile)
                     sizeInMB = (st.size / (1024 * 1024)).toFixed(2)
 

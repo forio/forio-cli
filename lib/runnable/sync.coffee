@@ -37,7 +37,7 @@ watch = (token, conf = config) ->
         simPath = "#{conf.remote}/#{serverPath}"
 
         time = process.hrtime()
-        uploader.uploadFileAPI localPath, simPath, token, (err, stdout, stderr) ->
+        uploader.uploadFileAPI conf.domain, localPath, simPath, token, (err, stdout, stderr) ->
             diff = process.hrtime time
             formattedDiff = ((diff[0] * 1e9 + diff[1]) / 1000000).toFixed(0)
 
@@ -63,7 +63,7 @@ watch = (token, conf = config) ->
 
 authenicateUser = (callback, conf = config)->
     ##Authenticating to make sure wherever you're writing to exists
-    authenticate conf.user, conf.pass, conf.remote, (response)->
+    authenticate conf.user, conf.pass, conf.domain, conf.remote, (response)->
         if !response.token
             console.error (color response.message, "red+bold")
             die()
@@ -86,6 +86,10 @@ exports.options =
     ignore:
         abbr: "i"
         help: "Regex with pattern of files to ignore for sync"
+    domain:
+        abbr: "d"
+        default: "forio.com"
+        help: "domain simulate is hosted on"
 
 exports.run = (options)->
     [local, remote] = op.parseMapping options.mapping
@@ -95,10 +99,13 @@ exports.run = (options)->
     #Assume current author by default
     remote = "#{user_name}/#{remote}"  if remote.indexOf('/') is -1
 
+    options.domain = "qa.forio.com" if options.domain is "qa"
+
     config =
         local: local
         remote: remote
         user: user_name
         pass: password
+        domain: options.domain
 
     authenicateUser watch
