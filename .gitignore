@@ -1,2 +1,4 @@
-node_modules/
+archive.zip
+node_modules
 config.json
+aliases.sh
