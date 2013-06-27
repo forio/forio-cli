@@ -14,3 +14,14 @@ exports.parseMapping = (mapping)->
     local += "/" if local.charAt(local.length - 1) isnt "/"
 
     return [local, remote]
+
+exports.parseDomain = (domain)->
+    mapping =
+        "qa": "qa.forio.com"
+        "www.forio.com": "forio.com"
+        "forio": "forio.com"
+
+    if mapping[domain] then domain = mapping[domain]
+
+    return domain
+

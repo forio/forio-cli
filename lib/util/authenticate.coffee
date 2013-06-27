@@ -10,8 +10,6 @@ authenicate = (userName, password, host, simPath, callback)->
           'Content-Type': 'application/x-www-form-urlencoded'
           'Content-Length': auth_params.length
 
-    console.log login_connection_param
-
     auth_request = http.request login_connection_param, (response) ->
         stack  = ""
         response.on "data", (payload) ->

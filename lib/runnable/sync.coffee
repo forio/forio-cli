@@ -93,6 +93,7 @@ exports.options =
 
 exports.run = (options)->
     [local, remote] = op.parseMapping options.mapping
+    domain = op.parseDomain options.domain
 
     {user_name, password} = (require options.config_file)
 
@@ -106,6 +107,6 @@ exports.run = (options)->
         remote: remote
         user: user_name
         pass: password
-        domain: options.domain
+        domain: domain
 
     authenicateUser watch

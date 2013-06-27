@@ -68,12 +68,12 @@ exports.run = (options)->
     console.log ""
 
     [local, remote] = op.parseMapping options.mapping
+    domain = op.parseDomain options.domain
+
     {user_name, password} = (require options.config_file)
 
     #Assume current author by default
     remote = "#{user_name}/#{remote}"  if remote.indexOf("/") is -1
-
-    options.domain = "qa.forio.com" if options.domain is "qa"
 
     tempFile = "#{basePath}/archive.zip"
 
@@ -82,7 +82,7 @@ exports.run = (options)->
         remote: remote
         user: user_name
         pass: password
-        domain: options.domain
+        domain: domain
 
     confirm "Are you sure you want to deploy " +  (color local, "white") + " to " + (color remote, "white") + "?", ()->
         createTempZip local, tempFile, ()->
