@@ -4,6 +4,7 @@ Forio CLI is both a set of tools to ease your worflow for working with simulatio
 
 ## Quick Start
 
+    $ npm install -g coffee-script #If you don't already have it
     $ git clone https://github.com/forio/forio-cli.git && cd forio-cli
     $ npm install
     $ chmod +x index.coffee
