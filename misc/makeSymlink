@@ -1,0 +1,80 @@
+#!/usr/bin/env python
+# TODO: integrate this with the F command
+import argparse
+import os
+
+def determine_source_path():
+    # TODO: make this script work even when run outside of top-level directory of sim.
+    if os.path.isdir("web"):
+        return os.path.abspath("web")
+    return os.getcwd()
+
+def which(name):
+    """Search PATH for a given executable file and return the first directory containing it."""
+    for directory in os.environ.get("PATH", "").split(os.pathsep):
+        path = os.path.join(directory, name)
+        if os.access(path, os.X_OK):
+            return os.path.dirname(os.path.realpath(path))
+    return None
+
+def guess_tomcat_path():
+    return (
+        os.environ.get("CATALINA_HOME") or
+        which("catalina.sh") or
+        which("catalina.bat") or
+        "/usr/local/Cellar/tomcat/6.0.26/libexec/bin"
+    )
+
+def determine_simulations_path(tomcat_path):
+    return os.path.realpath(os.path.join(tomcat_path, os.pardir, "simulate", "simulations"))
+
+def guess_username(simulations_path):
+    simulations_dir_contents = [os.path.join(simulations_path, name) for name in os.listdir(simulations_path)]
+    user_paths = [path for path in simulations_dir_contents if os.path.isdir(path)]
+    if user_paths:
+        return max(user_paths, key=sim_count)
+    else:
+        print("No user directories found in {}".format(simulations_path))
+
+def sim_count(user_path):
+    # TODO: test if sim exists in db
+    return sum(
+        1 for sim_dir in os.listdir(user_path)
+        if os.path.isdir(os.path.join(user_path, sim_dir)) and not sim_dir.startswith(".")
+    )
+
+def determine_user_path(simulations_path, username):
+    return os.path.join(simulations_path, username)
+
+def guess_sim_name():
+    return os.path.basename(os.getcwd())
+
+parser = argparse.ArgumentParser(
+    description="Make a symbolic link to a simulation in your Tomcat directory",
+    epilog="This script tries to guess your Tomcat path, username, and simulation name. " +
+        "Usually it can do what is desired by simply running `%(prog)s` or `%(prog)s SIM_NAME`.",
+)
+parser.add_argument("-t", "--tomcat-path", help="Directory for the Tomcat installation")
+parser.add_argument("-u", "--username", help="Name for the user owning this simulation")
+parser.add_argument("-f", "--force", help="Try to make the symlink, even if it already exists", action="store_true")
+parser.add_argument("sim_name", help="Name for the simulation", nargs="?")
+args = parser.parse_args()
+
+tomcat_path = args.tomcat_path or guess_tomcat_path()
+simulations_path = determine_simulations_path(tomcat_path)
+username = args.username or guess_username(simulations_path)
+sim_name = args.sim_name or guess_sim_name()
+user_path = determine_user_path(simulations_path, username)
+if os.path.isdir(user_path):
+    source_path = determine_source_path()
+    target_path = os.path.join(user_path, sim_name)
+    print("Linking {} to {}".format(source_path, target_path))
+    if args.force:
+        try:
+            os.remove(target_path)
+        except OSError:
+            pass
+    os.symlink(source_path, target_path)
+else:
+    # TODO: create directory and user in db
+    print("Can't create symlink. Directory {} not found.".format(user_path))

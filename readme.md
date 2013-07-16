@@ -60,5 +60,9 @@ All commands need to implement the following interface.
 - __exports.help__: One line description of what the command does
 - __exports.run__: This command will be passed a parsed object with any parameters passed from the console. Do with it what you will.
 
+## Other utilities
+
+The "misc" directory contains utilities that could not be integrated with the `F` command. Right now, the only thing in it is `makeSymlink`.
+
 
 [nom_nom_site]: https://github.com/harthur/nomnom
