@@ -37,11 +37,18 @@ watch = (token, conf = config) ->
         simPath = "#{conf.remote}/#{serverPath}"
 
         time = process.hrtime()
+        tryCount = 0
         uploader.uploadFileAPI conf.domain, localPath, simPath, token, (err, stdout, stderr) ->
             diff = process.hrtime time
             formattedDiff = ((diff[0] * 1e9 + diff[1]) / 1000000).toFixed(0)
 
-            response = JSON.parse stdout
+            try
+                response = JSON.parse stdout
+            catch
+                tryCount += 1
+                console.log "retrying file " + localPath + ", " +
+                    tryCount + " attempt" + (if tryCount > 1 then "s" else "")
+                return upload localPath, stats
             if +response.status_code is 201
                 console.log serverPath, (color "\u2192", "cyan"), "#{simPath}", "   #{formattedDiff}ms"
 
