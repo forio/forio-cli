@@ -32,12 +32,14 @@ watch = (token, conf = config) ->
         ignoreInitial: true
         persistent: true
 
-    upload = (localPath, stats) ->
+    upload = (localPath, stats, tryCount = 0) ->
         serverPath = localPath.replace conf.local, ""
         simPath = "#{conf.remote}/#{serverPath}"
 
         time = process.hrtime()
-        tryCount = 0
+        if tryCount > 0
+            console.log "retrying file " + localPath + ", " +
+                tryCount + " attempt" + (if tryCount > 1 then "s" else "")
         uploader.uploadFileAPI conf.domain, localPath, simPath, token, (err, stdout, stderr) ->
             diff = process.hrtime time
             formattedDiff = ((diff[0] * 1e9 + diff[1]) / 1000000).toFixed(0)
@@ -45,10 +47,7 @@ watch = (token, conf = config) ->
             try
                 response = JSON.parse stdout
             catch
-                tryCount += 1
-                console.log "retrying file " + localPath + ", " +
-                    tryCount + " attempt" + (if tryCount > 1 then "s" else "")
-                return upload localPath, stats
+                return upload localPath, stats, tryCount + 1
             if +response.status_code is 201
                 console.log serverPath, (color "\u2192", "cyan"), "#{simPath}", "   #{formattedDiff}ms"
 
@@ -56,12 +55,14 @@ watch = (token, conf = config) ->
                 console.log "Timed out. Reconnecting.."
                 authenicateUser (newtoken)->
                     token = newtoken
-                    upload localPath, stats
+                    upload localPath, stats, tryCount + 1
 
             else if response.message
                 console.error (color "#{response.status_code}:", "red"), response.message
+                upload localPath, stats, tryCount + 1
             else
                 console.error (color err, "red"), stderr, stdout
+                upload localPath, stats, tryCount + 1
 
 
     watcher.on "change", upload
