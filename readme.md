@@ -46,6 +46,9 @@ This will ask for a confirmation before deploying, and also make sure the path y
 
 Skipping __local_dir__ in the mapping defaults to current working directory. Skipping __sim_author__ defaults to using your account.
 
+This command may crash on OS X when uploading a large number of files simultaneously. This can be fixed by running this command in your terminal, or putting it in your `~/.bash_profile` file:
+
+    ulimit -n 10000
 
 ## Creating new commands
 
