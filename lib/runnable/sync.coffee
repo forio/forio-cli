@@ -17,7 +17,7 @@ watch = (token, conf = config) ->
 
     watcher = chokidar.watch conf.local,
         ignored: (item) ->
-            ignored_extensions = /\.(less|git|coffee|tmpl|DS_Store)/i
+            ignored_extensions = /\.(less|git|coffee|tmpl|tmp|DS_Store)/i
             ignored_directories = /node_modules/i
             ignored_files = /grunt.js|cakefile/i
 
