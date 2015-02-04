@@ -1,10 +1,11 @@
 #!/usr/bin/env coffee
+
 exec  = (require "child_process").exec
 color = (require "ansi-color").set
 fs = (require "fs")
 
-authenticate = (require "../util/authenticate").authenicate
-uploader = (require "../util/upload")
+authenticate = (require "../util/simulate/authenticate").authenicate
+uploader = (require "../util/simulate/upload")
 
 # options = (require "../options").options
 op = (require "../util/optionsParser")
