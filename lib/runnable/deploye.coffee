@@ -38,11 +38,11 @@ confirm = (str, onYes)->
     process.stdout.write "#{str} (Y/n) "
     process.stdin.setEncoding "utf8"
     process.stdin.once "data", (val)->
-    if val.trim() is "Y"
-        process.stdin.resume()
-        onYes()
-    else
-        die()
+        if val.trim() is "Y"
+            process.stdin.resume()
+            onYes()
+        else
+            die()
 
 createTempZip = (local, tempFile, callback) ->
     exec "rm #{tempFile}", ()->
