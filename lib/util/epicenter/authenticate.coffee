@@ -1,7 +1,7 @@
 http = require 'http'
 
 authenicate = (userName, password, host, simPath, callback)->
-    auth_params = '{"userName": "#{userName}", "password": "#{password}"}'
+    auth_params = """{"userName": "#{userName}", "password": "#{password}"}"""
 
     host = host.split ':'
 
