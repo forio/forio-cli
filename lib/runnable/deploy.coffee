@@ -64,7 +64,7 @@ exports.options =
     domain:
         abbr: "d"
         default: "forio.com"
-        help: "Domain simulate is hosted on"
+        help: "Domain Simulate is hosted on"
 
 exports.run = (options)->
     console.log ""

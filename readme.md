@@ -28,7 +28,7 @@ Commands are high-level actions you're allowed to perform. Each command can defi
 
     Options:
        -c, --config_file   Path to config file  [~/../../config.json]
-       -d, --domain        Domain simulate is hosted on  [forio.com]
+       -d, --domain        Domain Simulate is hosted on  [forio.com]
 
     Deploy files to a simulation hosted on Simulate
 
@@ -45,7 +45,7 @@ Skipping `local_dir` in the mapping defaults to current working directory. Skipp
     Options:
        -c, --config_file   Path to config file  [~/../../config.json]
        -i, --ignore        Regex with pattern of files to ignore for sync
-       -d, --domain        Domain simulate is hosted on  [forio.com]
+       -d, --domain        Domain Simulate is hosted on  [forio.com]
 
     Watch dir for changes and upload to a simulation hosted on Simulate
 
