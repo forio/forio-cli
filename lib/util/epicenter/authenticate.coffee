@@ -11,7 +11,6 @@ authenicate = (userName, password, host, simPath, callback)->
         method: 'POST'
         headers:
             'Content-Type': 'application/json'
-            'Content-Length': auth_params.length
     if host[1]
         login_connection_param.port = host[1]
 
