@@ -1,7 +1,7 @@
 {
   "dependencies": {
-    "chokidar": "~0.6.2",
-    "ansi-color": "~0.2.1",
-    "nomnom": "~1.6.0"
+    "chokidar": "^1.0.0-rc3",
+    "ansi-color": "^0.2.1",
+    "nomnom": "^1.8.1"
   }
 }
