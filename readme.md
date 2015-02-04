@@ -34,7 +34,7 @@ Commands are high-level actions you're allowed to perform. Each command can defi
 
 This will ask for a confirmation before deploying, and also make sure the path you're deploying to exists.
 
-Skipping __local_dir__ in the mapping defaults to current working directory. Skipping __sim_author__ defaults to using your account.
+Skipping `local_dir` in the mapping defaults to current working directory. Skipping `sim_author` defaults to using your account.
 
 ### `F sync` - Sync to Simulate
 
@@ -49,7 +49,7 @@ Skipping __local_dir__ in the mapping defaults to current working directory. Ski
 
     Watch dir for changes and upload to a simulation hosted on Simulate
 
-Skipping __local_dir__ in the mapping defaults to current working directory. Skipping __sim_author__ defaults to using your account.
+Skipping `local_dir` in the mapping defaults to current working directory. Skipping `sim_author` defaults to using your account.
 
 This command may crash on OS X when uploading a large number of files simultaneously. This can be fixed by running this command in your terminal, or putting it in your `~/.bash_profile` file:
 
@@ -64,9 +64,9 @@ Creating new commands is fairly straight forward.
 
 All commands need to implement the following interface.
 
-- __exports.help__: One line description of what the command does
-- __exports.options__: An object with the options you want to expose. See [nomnom][nom_nom_site] for options.
-- __exports.run__: This command will be passed a parsed object with any parameters passed from the console. Do with it what you will.
+- `exports.help`: One line description of what the command does
+- `exports.options`: An object with the options you want to expose. See [nomnom][nom_nom_site] for options.
+- `exports.run`: This command will be passed a parsed object with any parameters passed from the console. Do with it what you will.
 
 ## Other utilities
 
