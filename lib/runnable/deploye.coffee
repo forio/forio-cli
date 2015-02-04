@@ -71,7 +71,6 @@ exports.run = (options)->
 
     [local, remote] = op.parseMapping options.mapping
     domain = op.parseDomain options.domain
-    console.log domain
 
     {user_name, password} = (require options.config_file)
 
