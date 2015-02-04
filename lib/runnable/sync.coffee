@@ -112,8 +112,6 @@ exports.run = (options)->
     #Assume current author by default
     remote = "#{user_name}/#{remote}"  if remote.indexOf('/') is -1
 
-    options.domain = "qa.forio.com" if options.domain is "qa"
-
     config =
         local: local
         remote: remote
