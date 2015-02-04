@@ -7,7 +7,7 @@ authenicate = (userName, password, host, simPath, callback)->
 
     login_connection_param =
         host: host[0]
-        path: "/authentication/#{simPath}"
+        path: "/authentication"
         method: 'POST'
         headers:
             'Content-Type': 'application/json'
