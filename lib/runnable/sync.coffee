@@ -12,7 +12,7 @@ config = {}
 die = ()-> process.kill("SIGTERM")
 
 watch = (token, conf = config) ->
-    console.log "Watching", (color conf.local, "white_bg+black"), "for changes.."
+    console.log "Watching #{color conf.local, "white_bg+black"} for changes.."
     console.log ""
 
     watcher = chokidar.watch conf.local,
@@ -40,8 +40,7 @@ watch = (token, conf = config) ->
 
         time = process.hrtime()
         if tryCount > 0
-            console.log "retrying file " + localPath + ", " +
-                tryCount + " attempt" + (if tryCount > 1 then "s" else "")
+            console.log "retrying file #{localPath}, #{tryCount} attempt#{if tryCount > 1 then "s" else ""}"
 
             if tryCount > MAX_RETRIES
                 die()
@@ -57,7 +56,7 @@ watch = (token, conf = config) ->
                 return upload localPath, stats, tryCount + 1
 
             if +response.status_code is 201
-                console.log serverPath, (color "\u2192", "cyan"), "#{simPath}", "   #{formattedDiff}ms"
+                console.log "#{serverPath} #{color "\u2192", "cyan"} #{simPath}    #{formattedDiff}ms"
 
             else if +response.status_code is 401
                 console.log "Timed out. Reconnecting.."
@@ -65,9 +64,9 @@ watch = (token, conf = config) ->
                     token = newtoken
                     upload localPath, stats, tryCount + 1
             else if response.message
-                console.error (color "#{response.status_code}:", "red"), response.message, localPath
+                console.error "#{color "#{response.status_code}:", "red"} #{response.message} #{localPath}"
             else
-                console.error (color err, "red"), stderr, stdout
+                console.error "#{color err, "red"} #{stderr} #{stdout}"
 
 
     watcher.on "change", upload

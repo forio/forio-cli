@@ -21,7 +21,7 @@ getToken = (callback)->
     authenticate config.user, config.pass, config.domain, config.remote, (response)->
         if !response.token
             process.stdout.write color('  \u2716 \n', "red")
-            console.error color(response.status_code + ":", "red+bold"), response.message
+            console.error "#{color "#{response.status_code}:", "red+bold"} #{response.message}"
             die()
         else
             process.stdout.write color('  \u2713 \n', "green")
@@ -87,7 +87,7 @@ exports.run = (options)->
         pass: password
         domain: domain
 
-    confirm "Are you sure you want to deploy " +  (color local, "white") + " to " + (color remote, "white") + "?", ()->
+    confirm "Are you sure you want to deploy #{color local, "white"} to #{color remote, "white"}?", ()->
         createTempZip local, tempFile, ()->
             getToken (token)->
                 uploadFile token, ()->
@@ -95,6 +95,6 @@ exports.run = (options)->
                     sizeInMB = (st.size / (1024 * 1024)).toFixed(2)
 
                     console.log ""
-                    console.log "Uploaded", color(sizeInMB + "MB", "bold+white"), "to", color(remote, "bold+white"), "in", process.uptime(), "seconds"
+                    console.log "Uploaded #{color "#{sizeInMB}MB", "bold+white"} to #{color remote, "bold+white"} in #{process.uptime()} seconds"
 
                     die()
