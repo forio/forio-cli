@@ -1,4 +1,4 @@
-http = require 'http'
+http = require 'https'
 
 authenicate = (userName, password, host, simPath, callback)->
     auth_params = """{"userName": "#{userName}", "password": "#{password}"}"""
