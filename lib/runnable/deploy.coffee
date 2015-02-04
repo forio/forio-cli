@@ -48,7 +48,8 @@ createTempZip = (local, tempFile, callback) ->
     exec "rm #{tempFile}", ()->
         exec "zip -r #{tempFile} . -x@#{basePath}/exclude.lst", {cwd: local}, callback
 
-exports.help = "Deploy files to a simulation."
+
+exports.help = "Deploy files to a simulation hosted on Simulate"
 
 exports.options =
     mapping:

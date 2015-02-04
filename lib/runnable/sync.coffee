@@ -84,7 +84,7 @@ authenicateUser = (callback, conf = config)->
             (callback response.token, conf)
 
 
-exports.help = "Watch dir for changes and upload to simulation"
+exports.help = "Watch dir for changes and upload to a simulation hosted on Simulate"
 
 exports.options =
     mapping:
