@@ -34,9 +34,9 @@ uploadFile = (token, callback) ->
         callback()
 
 confirm = (str, onYes)->
-  process.stdout.write "#{str} (Y/n) "
-  process.stdin.setEncoding "utf8"
-  process.stdin.once "data", (val)->
+    process.stdout.write "#{str} (Y/n) "
+    process.stdin.setEncoding "utf8"
+    process.stdin.once "data", (val)->
     if val.trim() is "Y"
         process.stdin.resume()
         onYes()
