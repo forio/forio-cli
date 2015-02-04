@@ -86,7 +86,7 @@ exports.run = (options)->
         pass: password
         domain: domain
 
-    confirm "Are you sure you want to deploy #{color local, "white"} to #{color remote, "white"}?", ()->
+    confirm "Are you sure you want to deploy #{color local, "white"} to #{color remote, "white"} on #{color domain, "white"}?", ()->
         createTempZip local, tempFile, ()->
             getToken (token)->
                 uploadFile token, ()->
