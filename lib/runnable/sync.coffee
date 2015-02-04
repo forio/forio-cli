@@ -102,7 +102,7 @@ exports.options =
     domain:
         abbr: "d"
         default: "forio.com"
-        help: "domain simulate is hosted on"
+        help: "Domain simulate is hosted on"
 
 exports.run = (options)->
     [local, remote] = op.parseMapping options.mapping

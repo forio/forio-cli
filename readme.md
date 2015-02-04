@@ -12,6 +12,7 @@ Forio CLI is both a set of tools to ease your worflow for working with simulatio
     $ mv config.json.dummy config.json #Use this to manage creds until SIMULATE-6036 is fixed
 
 ## Commands
+
 Commands are high-level actions you're allowed to perform. Each command can define its own optional parameters. Invoking the command without specifying any of the required options prints out the usage. The following commands are currently supported
 
     Usage: F <command>
@@ -26,13 +27,14 @@ Commands are high-level actions you're allowed to perform. Each command can defi
 
     Options:
        -c, --config_file   Path to config file  [~/../../config.json]
-       -d, --domain        domain simulate is hosted on  [forio.com]
+       -d, --domain        Domain simulate is hosted on  [forio.com]
 
     Deploy files to a simulation
 
 This will ask for a confirmation before deploying, and also make sure the path you're deploying to exists.
 
 ### Sync
+
     Usage: F sync <mapping> [options]
 
     mapping     <local_dir>:<sim_author>/<sim_name>
@@ -40,7 +42,7 @@ This will ask for a confirmation before deploying, and also make sure the path y
     Options:
        -c, --config_file   Path to config file  [/Users/narenranjit/FPrjs/scripts/lib/runnable/../../config.json]
        -i, --ignore        Regex with pattern of files to ignore for sync
-       -d, --domain        domain simulate is hosted on  [forio.com]
+       -d, --domain        Domain simulate is hosted on  [forio.com]
 
     Watch dir for changes and upload to simulation
 
