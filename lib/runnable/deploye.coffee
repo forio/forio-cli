@@ -8,7 +8,7 @@ authenticate = (require "../util/epicenter/authenticate").authenicate
 uploader = (require "../util/epicenter/upload")
 
 # options = (require "../options").options
-op = (require "../util/optionsParser")
+op = (require "../util/epicenter/optionsParser")
 
 #Path to root
 basePath = __dirname + "/../.."

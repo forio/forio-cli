@@ -1,5 +1,3 @@
-#!/usr/bin/env coffee
-
 fs = (require "fs")
 
 exports.parseMapping = (mapping)->

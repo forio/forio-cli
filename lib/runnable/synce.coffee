@@ -4,7 +4,7 @@ chokidar =  require "chokidar"
 color = (require "ansi-color").set
 
 authenticate = (require "../util/epicenter/authenticate").authenicate
-op = require "../util/optionsParser"
+op = require "../util/epicenter/optionsParser"
 uploader = require "../util/epicenter/upload"
 
 config = {}

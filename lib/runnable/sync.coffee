@@ -4,7 +4,7 @@ chokidar =  require "chokidar"
 color = (require "ansi-color").set
 
 authenticate = (require "../util/simulate/authenticate").authenicate
-op = require "../util/optionsParser"
+op = require "../util/simulate/optionsParser"
 uploader = require "../util/simulate/upload"
 
 config = {}

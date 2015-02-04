@@ -8,7 +8,7 @@ authenticate = (require "../util/simulate/authenticate").authenicate
 uploader = (require "../util/simulate/upload")
 
 # options = (require "../options").options
-op = (require "../util/optionsParser")
+op = (require "../util/simulate/optionsParser")
 
 #Path to root
 basePath = __dirname + "/../.."
