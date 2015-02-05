@@ -56,7 +56,7 @@ watch = (token, conf = config) ->
                 return upload localPath, stats, tryCount + 1
 
             if +response.status_code is 201
-                console.log "#{serverPath} #{color "\u2192", "cyan"} #{simPath}    #{formattedDiff}ms"
+                console.log "#{serverPath} #{color "\u2192", "cyan+bold"} #{simPath}    #{formattedDiff}ms"
 
             else if +response.status_code is 401
                 console.log "Timed out. Reconnecting.."
