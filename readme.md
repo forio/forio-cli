@@ -1,6 +1,6 @@
 # Forio CLI
 
-Forio CLI is both a set of tools to ease your worflow for working with simulations on Forio Simulate or Forio Epicenter, as well as a framework for making your own.
+Forio CLI is both a set of tools to ease your worflow for working with simulations on Forio Epicenter or Forio Simulate, as well as a framework for making your own.
 
 ## Quick Start
 
@@ -29,7 +29,7 @@ Commands are high-level actions you're allowed to perform. Each command can defi
     Options:
        -p, --platform      Platform (epicenter or simulate)  [epicenter]
        -c, --config_file   Path to config file  [./config.json]
-       -d, --domain        Domain Simulate or Epicenter is hosted on  [forio.com or api.forio.com]
+       -d, --domain        Domain Epicenter or Simulate is hosted on  [api.forio.com or forio.com]
 
     Deploy files to a simulation
 
@@ -46,7 +46,7 @@ Skipping `local_dir` in the mapping defaults to current working directory. Skipp
     Options:
        -p, --platform      Platform (epicenter or simulate)  [epicenter]
        -c, --config_file   Path to config file  [./config.json]
-       -d, --domain        Domain Simulate or Epicenter is hosted on  [forio.com or api.forio.com]
+       -d, --domain        Domain Epicenter or Simulate is hosted on  [api.forio.com or forio.com]
        -i, --ignore        Regex with pattern of files to ignore for sync
 
     Watch dir for changes and upload to a simulation
