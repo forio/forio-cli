@@ -71,7 +71,6 @@ watch = (token, conf = config) ->
 
     watcher.on "change", upload
     watcher.on "add", upload
-    watcher.close()
 
 authenicateUser = (callback, conf = config)->
     ##Authenticating to make sure wherever you're writing to exists
