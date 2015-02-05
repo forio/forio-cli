@@ -1,15 +1,19 @@
-exec  = (require 'child_process').exec
+exec = (require 'child_process').exec
+path = require 'path'
 
-uploadFileAPI = (domain, localPath, simPath, token, callback)->
-    file_url = "#{domain}/file/#{simPath}"
-    exec """curl --silent -L -H "Authorization: Bearer #{token}" -F content=@#{localPath} -F method=PUT #{file_url}""", callback
+uploadFileAPI = (domain, localPath, simPath, token, callback) ->
+    file_url = "https://#{domain}/file/#{simPath}"
+    file_name = path.basename localPath
+    exec """curl --silent -L -H "Authorization: Bearer #{token}" -F file=@#{localPath} -F name=#{file_name} -X PUT #{file_url}""", callback
 
-uploadZip = (domain, localPath, simPath, token, callback)->
-    file_url = "#{domain}/file/#{simPath}"
-    exec """curl -L -H "Authorization: Bearer #{token}" -F content=@#{localPath} -F method=PUT #{file_url}""", ->
-        zip_file_name = localPath.slice(localPath.lastIndexOf('/'))
-        zip_file_url = "#{file_url}#{zip_file_name}"
-        exec """curl -L -H "Authorization: Bearer #{token}" -F type=Application/unzip -F method=PATCH #{zip_file_url}""", callback
+uploadZip = (domain, localPath, simPath, token, callback) ->
+    file_url = "https://#{domain}/file/#{simPath}"
+    file_name = path.basename localPath
+    unzip_params =
+        contentType: "application/unzip"
+    exec """curl -L -H "Authorization: Bearer #{token}" -F file=@#{localPath} -F name=#{file_name} -X PUT #{file_url}""", ->
+        process.stdout.write " unzipping....."
+        exec """curl -L -H "Authorization: Bearer #{token}" -H "Content-Type: application/json" -d '#{JSON.stringify unzip_params}' -X PATCH #{file_url}/#{file_name}""", callback
 
 exports.uploadFileAPI = uploadFileAPI
 exports.uploadZip = uploadZip
