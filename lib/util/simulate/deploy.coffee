@@ -1,14 +1,12 @@
-#!/usr/bin/env coffee
-
 exec  = (require "child_process").exec
 color = (require "ansi-color").set
 fs = (require "fs")
 
-authenticate = (require "../util/epicenter/authenticate").authenicate
-uploader = (require "../util/epicenter/upload")
+authenticate = (require "./authenticate").authenicate
+uploader = (require "./upload")
 
 # options = (require "../options").options
-op = (require "../util/epicenter/optionsParser")
+op = (require "./optionsParser")
 
 #Path to root
 basePath = __dirname + "/../.."
@@ -19,13 +17,13 @@ die = ()-> process.kill("SIGTERM")
 getToken = (callback)->
     process.stdout.write "Authenticating as #{config.user}................"
     authenticate config.user, config.pass, config.domain, config.remote, (response)->
-        if !response.access_token
+        if !response.token
             process.stdout.write color('  \u2716 \n', "red")
             console.error "#{color "#{response.status_code}:", "red+bold"} #{response.message}"
             die()
         else
             process.stdout.write color('  \u2713 \n', "green")
-            callback(response.access_token)
+            callback(response.token)
 
 uploadFile = (token, callback) ->
     process.stdout.write "Uploading to #{config.remote}....."
@@ -49,30 +47,13 @@ createTempZip = (local, tempFile, callback) ->
         exec "zip -r #{tempFile} . -x@#{basePath}/exclude.lst", {cwd: local}, callback
 
 
-exports.help = "Deploy files to a simulation hosted on Epicenter"
-
-exports.options =
-    mapping:
-        abbr: "m"
-        position: 1
-        required: true
-        help: "<local_dir>:<account_id>/<project_id>"
-    config_file:
-        abbr: "c"
-        help: "Path to config file"
-        default: __dirname + "/../../confige.json"
-    domain:
-        abbr: "d"
-        default: "api.forio.com"
-        help: "Domain Epicenter is hosted on"
-
 exports.run = (options)->
     console.log ""
 
     [local, remote] = op.parseMapping options.mapping
     domain = op.parseDomain options.domain
 
-    {user_name, password} = (require options.config_file)
+    {user_name, password} = options
 
     #Assume current author by default
     remote = "#{user_name}/#{remote}"  if remote.indexOf("/") is -1

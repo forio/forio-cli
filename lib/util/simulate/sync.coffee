@@ -1,11 +1,9 @@
-#!/usr/bin/env coffee
-
 chokidar =  require "chokidar"
 color = (require "ansi-color").set
 
-authenticate = (require "../util/epicenter/authenticate").authenicate
-op = require "../util/epicenter/optionsParser"
-uploader = require "../util/epicenter/upload"
+authenticate = (require "./authenticate").authenicate
+op = require "./optionsParser"
+uploader = require "./upload"
 
 config = {}
 
@@ -55,16 +53,16 @@ watch = (token, conf = config) ->
             catch
                 return upload localPath, stats, tryCount + 1
 
-            if not response.status? or +response.status in [200, 201]
+            if +response.status_code is 201
                 console.log "#{serverPath} #{color "\u2192", "cyan+bold"} #{simPath}    #{formattedDiff}ms"
 
-            else if +response.status is 401
+            else if +response.status_code is 401
                 console.log "Timed out. Reconnecting.."
                 authenicateUser (newtoken)->
                     token = newtoken
                     upload localPath, stats, tryCount + 1
             else if response.message
-                console.error "#{color "#{response.status}:", "red"} #{response.message} #{localPath}"
+                console.error "#{color "#{response.status_code}:", "red"} #{response.message} #{localPath}"
             else
                 console.error "#{color err, "red"} #{stderr} #{stdout}"
 
@@ -75,38 +73,18 @@ watch = (token, conf = config) ->
 authenicateUser = (callback, conf = config)->
     ##Authenticating to make sure wherever you're writing to exists
     authenticate conf.user, conf.pass, conf.domain, conf.remote, (response)->
-        if !response.access_token
+        if !response.token
             console.error (color response.message, "red+bold")
             die()
         else
-            (callback response.access_token, conf)
+            (callback response.token, conf)
 
-
-exports.help = "Watch dir for changes and upload to a simulation hosted on Epicenter"
-
-exports.options =
-    mapping:
-        abbr: "m"
-        position: 1
-        required: true
-        help: "<local_dir>:<account_id>/<project_id>"
-    config_file:
-        abbr: "c"
-        help: "Path to config file"
-        default: __dirname + "/../../confige.json"
-    ignore:
-        abbr: "i"
-        help: "Regex with pattern of files to ignore for sync"
-    domain:
-        abbr: "d"
-        default: "api.forio.com"
-        help: "Domain Epicenter is hosted on"
 
 exports.run = (options)->
     [local, remote] = op.parseMapping options.mapping
     domain = op.parseDomain options.domain
 
-    {user_name, password} = (require options.config_file)
+    {user_name, password} = options
 
     #Assume current author by default
     remote = "#{user_name}/#{remote}"  if remote.indexOf('/') is -1

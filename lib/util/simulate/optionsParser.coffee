@@ -17,6 +17,7 @@ exports.parseDomain = (domain)->
     mapping =
         "qa": "qa.forio.com"
         "www.forio.com": "forio.com"
+        "api.forio.com": "forio.com"
         "forio": "forio.com"
 
     if mapping[domain] then domain = mapping[domain]

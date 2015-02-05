@@ -10,8 +10,7 @@ Forio CLI is both a set of tools to ease your worflow for working with simulatio
     $ npm install
     $ chmod +x index.coffee
     $ alias F='~/PROJECT_PATH/forio-cli/index.coffee'
-    $ cp config.json.dummy config.json #Use this to manage creds for Simulate until SIMULATE-6036 is fixed
-    $ cp confige.json.dummy confige.json #Use this to manage creds for Epicenter
+    $ cp config-sample.json config.json #Use this to manage creds until SIMULATE-6036 is fixed
 
 ## Commands
 
@@ -19,73 +18,40 @@ Commands are high-level actions you're allowed to perform. Each command can defi
 
     Usage: F <command>
 
-    command     one of: deploy, sync, deploye, synce
+    command     one of: deploy, sync
 
-### `F deploy` - Deploy to Simulate
+### `F deploy` - Deploy
 
     Usage: F deploy <mapping> [options]
 
-    mapping     <local_dir>:<sim_author>/<sim_name>
+    mapping     <local_dir>:<account>/<project>
 
     Options:
-       -c, --config_file   Path to config file  [~/../../config.json]
-       -d, --domain        Domain Simulate is hosted on  [forio.com]
+       -p, --platform      Platform (epicenter or simulate)  [epicenter]
+       -c, --config_file   Path to config file  [./config.json]
+       -d, --domain        Domain Simulate or Epicenter is hosted on  [forio.com or api.forio.com]
 
-    Deploy files to a simulation hosted on Simulate
+    Deploy files to a simulation
 
 This will ask for a confirmation before deploying, and also make sure the path you're deploying to exists.
 
-Skipping `local_dir` in the mapping defaults to current working directory. Skipping `sim_author` defaults to using your account.
+Skipping `local_dir` in the mapping defaults to current working directory. Skipping `account` defaults to using your account.
 
-### `F sync` - Sync to Simulate
+### `F sync` - Sync
 
     Usage: F sync <mapping> [options]
 
-    mapping     <local_dir>:<sim_author>/<sim_name>
+    mapping     <local_dir>:<account>/<project>
 
     Options:
-       -c, --config_file   Path to config file  [~/../../config.json]
+       -p, --platform      Platform (epicenter or simulate)  [epicenter]
+       -c, --config_file   Path to config file  [./config.json]
+       -d, --domain        Domain Simulate or Epicenter is hosted on  [forio.com or api.forio.com]
        -i, --ignore        Regex with pattern of files to ignore for sync
-       -d, --domain        Domain Simulate is hosted on  [forio.com]
 
-    Watch dir for changes and upload to a simulation hosted on Simulate
+    Watch dir for changes and upload to a simulation
 
-Skipping `local_dir` in the mapping defaults to current working directory. Skipping `sim_author` defaults to using your account.
-
-This command may crash on OS X when uploading a large number of files simultaneously. This can be fixed by running this command in your terminal, or putting it in your `~/.bash_profile` file:
-
-    ulimit -n 10000
-
-### `F deploye` - Deploy to Epicenter
-
-    Usage: F deploye <mapping> [options]
-
-    mapping     <local_dir>:<account_id>/<project_id>
-
-    Options:
-       -c, --config_file   Path to config file  [~/../../confige.json]
-       -d, --domain        Domain Epicenter is hosted on  [api.forio.com]
-
-    Deploy files to a simulation hosted on Epicenter
-
-This will ask for a confirmation before deploying, and also make sure the path you're deploying to exists.
-
-Skipping `local_dir` in the mapping defaults to current working directory. Skipping `account_id` defaults to using your account.
-
-### `F synce` - Sync to Epicenter
-
-    Usage: F synce <mapping> [options]
-
-    mapping     <local_dir>:<account_id>/<project_id>
-
-    Options:
-       -c, --config_file   Path to config file  [~/../../confige.json]
-       -i, --ignore        Regex with pattern of files to ignore for sync
-       -d, --domain        Domain Epicenter is hosted on  [api.forio.com]
-
-    Watch dir for changes and upload to a simulation hosted on Epicenter
-
-Skipping `local_dir` in the mapping defaults to current working directory. Skipping `account_id` defaults to using your account.
+Skipping `local_dir` in the mapping defaults to current working directory. Skipping `account` defaults to using your account.
 
 This command may crash on OS X when uploading a large number of files simultaneously. This can be fixed by running this command in your terminal, or putting it in your `~/.bash_profile` file:
 

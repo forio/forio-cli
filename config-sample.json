@@ -1,0 +1,11 @@
+{
+    "epicenter": {
+        "user_name": "USER_NAME",
+        "password": "PASSWORD"
+    },
+    "simulate": {
+        "user_name": "USER_NAME",
+        "password": "PASSWORD"
+    },
+    "default": "epicenter"
+}
