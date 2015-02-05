@@ -20,7 +20,7 @@ Commands are high-level actions you're allowed to perform. Each command can defi
 
     command     one of: deploy, sync
 
-### `F deploy` - Deploy
+### `F deploy`
 
     Usage: F deploy <mapping> [options]
 
@@ -37,7 +37,7 @@ This will ask for a confirmation before deploying, and also make sure the path y
 
 Skipping `local_dir` in the mapping defaults to current working directory. Skipping `account` defaults to using your account.
 
-### `F sync` - Sync
+### `F sync`
 
     Usage: F sync <mapping> [options]
 
