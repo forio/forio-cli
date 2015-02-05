@@ -1,7 +1,7 @@
 http = require 'https'
 
 authenicate = (userName, password, host, simPath, callback)->
-    auth_params = """{"userName": "#{userName}", "password": "#{password}"}"""
+    auth_params = {userName, password}
 
     host = host.split ':'
 
@@ -23,7 +23,7 @@ authenicate = (userName, password, host, simPath, callback)->
             response = (JSON.parse stack)
             callback (response)
 
-    auth_request.write auth_params
+    auth_request.write (JSON.stringify auth_params)
     auth_request.end()
 
 exports.authenicate = authenicate
