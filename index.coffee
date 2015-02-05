@@ -1,4 +1,5 @@
 #!/usr/bin/env coffee
+
 fs =  require "fs"
 parser = require "nomnom"
 
@@ -8,6 +9,8 @@ pluginsDir = "#{__dirname}/lib/runnable"
 files = fs.readdirSync pluginsDir
 files.forEach (file) ->
     [moduleName] = file.split "."
+    if moduleName is "" then return # skip .DS_Store
+
     mod = require "#{pluginsDir}/#{moduleName}"
 
     parser
