@@ -55,16 +55,16 @@ watch = (token, conf = config) ->
             catch
                 return upload localPath, stats, tryCount + 1
 
-            if +response.status_code is 201
+            if not response.status? or +response.status in [200, 201]
                 console.log "#{serverPath} #{color "\u2192", "cyan+bold"} #{simPath}    #{formattedDiff}ms"
 
-            else if +response.status_code is 401
+            else if +response.status is 401
                 console.log "Timed out. Reconnecting.."
                 authenicateUser (newtoken)->
                     token = newtoken
                     upload localPath, stats, tryCount + 1
             else if response.message
-                console.error "#{color "#{response.status_code}:", "red"} #{response.message} #{localPath}"
+                console.error "#{color "#{response.status}:", "red"} #{response.message} #{localPath}"
             else
                 console.error "#{color err, "red"} #{stderr} #{stdout}"
 

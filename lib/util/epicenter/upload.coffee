@@ -2,7 +2,7 @@ exec = (require 'child_process').exec
 path = require 'path'
 
 uploadFileAPI = (domain, localPath, simPath, token, callback) ->
-    file_url = "https://#{domain}/file/#{simPath}"
+    file_url = "https://#{domain}/file/#{path.dirname simPath}"
     file_name = path.basename localPath
     exec """curl --silent -L -H "Authorization: Bearer #{token}" -F file=@#{localPath} -F name=#{file_name} -X PUT #{file_url}""", callback
 
