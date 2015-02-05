@@ -9,7 +9,7 @@ uploader = (require "./upload")
 op = (require "./optionsParser")
 
 #Path to root
-basePath = __dirname + "/../.."
+basePath = __dirname + "/../../.."
 
 config = {}
 die = ()-> process.kill("SIGTERM")

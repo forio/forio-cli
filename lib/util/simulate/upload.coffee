@@ -4,7 +4,7 @@ uploadFile = (localPath, simPath, user, password, callback)->
     list = localPath.split('/')
     folder = if list.length > 1 then list[0..(list.length - 2)].join('/') else ''
 
-    exec "#{__dirname}/../../upload.sh #{localPath} #{simPath} #{user} #{password}", callback
+    exec "#{__dirname}/../../../upload.sh #{localPath} #{simPath} #{user} #{password}", callback
 
 uploadFileAPI = (domain, localPath, simPath, token, callback)->
     file_url = "#{domain}/simulate/api/file/#{simPath}"

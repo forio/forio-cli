@@ -37,4 +37,4 @@ exports.run = (options) ->
     options.user_name = config.user_name
     options.password = config.password
 
-    (require "util/#{platform}/sync").run options
+    (require "../util/#{platform}/sync").run options
