@@ -7,7 +7,7 @@ uploader = require "./upload"
 
 config = {}
 
-die = ()-> process.kill("SIGTERM")
+die = ()-> process.exit()
 
 watch = (token, conf = config) ->
     console.log "Watching #{color conf.local, "white_bg+black"} for changes.."

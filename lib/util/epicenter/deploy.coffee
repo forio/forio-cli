@@ -12,7 +12,7 @@ op = (require "./optionsParser")
 basePath = __dirname + "/../../.."
 
 config = {}
-die = ()-> process.kill("SIGTERM")
+die = ()-> process.exit()
 
 getToken = (callback)->
     process.stdout.write "Authenticating as #{config.user}................"
