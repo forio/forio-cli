@@ -1,6 +1,6 @@
 # Forio CLI
 
-Forio CLI is both a set of tools to ease your worflow for working with simulations on Forio Epicenter or Forio Simulate, as well as a framework for making your own.
+Forio CLI is both a set of tools to ease your workflow for working with simulations on Forio Epicenter or Forio Simulate, as well as a framework for making your own.
 
 ## Quick Start
 
