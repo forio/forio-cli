@@ -37,7 +37,9 @@ confirm = (str, onYes)->
     process.stdin.setEncoding "utf8"
     process.stdin.once "data", (val)->
         if val.trim() is "Y"
-            process.stdin.resume()
+            # was `process.stdin.resume()`, but changed for compatibility with node 0.12
+            # http://nodejs.org/api/stream.html#stream_compatibility_with_older_node_versions
+            process.stdin.end()
             onYes()
         else
             die()
