@@ -1,4 +1,10 @@
 {
+  "name": "forio-cli",
+  "version": "0.2.0",
+  "description": "Forio CLI",
+  "engines": {
+    "node": "0.12"
+  },
   "dependencies": {
     "chokidar": "^1.0.0-rc3",
     "ansi-color": "^0.2.1",
