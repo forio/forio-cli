@@ -10,8 +10,8 @@ authenicate = (userName, password, host, simPath, callback)->
         path: "/simulate/api/authentication/#{simPath}"
         method: 'POST'
         headers:
-          'Content-Type': 'application/x-www-form-urlencoded'
-          'Content-Length': auth_params.length
+            'Content-Type': 'application/x-www-form-urlencoded'
+            'Content-Length': auth_params.length
     if host[1]
         login_connection_param.port = host[1]
 

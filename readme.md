@@ -1,50 +1,57 @@
 # Forio CLI
 
-Forio CLI is both a set of tools to ease your worflow for working with simulations on Forio Simulate, as well as a framework for making your own.
+Forio CLI is both a set of tools to ease your workflow for working with simulations on Forio Epicenter or Forio Simulate, as well as a framework for making your own.
 
 ## Quick Start
 
     $ npm install -g coffee-script #If you don't already have it
-    $ git clone https://github.com/forio/forio-cli.git && cd forio-cli
+    $ git clone https://github.com/forio/forio-cli.git
+    $ cd forio-cli
     $ npm install
     $ chmod +x index.coffee
-    $ alias F='your/path/index.coffee'
-    $ mv config.json.dummy config.json #Use this to manage creds until SIMULATE-6036 is fixed
+    $ alias F='~/PROJECT_PATH/forio-cli/index.coffee'
+    $ cp config-sample.json config.json #Use this to manage creds until SIMULATE-6036 is fixed
 
 ## Commands
+
 Commands are high-level actions you're allowed to perform. Each command can define its own optional parameters. Invoking the command without specifying any of the required options prints out the usage. The following commands are currently supported
 
     Usage: F <command>
 
     command     one of: deploy, sync
 
-### Deploy
+### `F deploy`
 
     Usage: F deploy <mapping> [options]
 
-    mapping     <local_dir>:<sim_author>/<sim_name>
+    mapping     <local_dir>:<account>/<project>
 
     Options:
-       -c, --config_file   Path to config file  [~/../../config.json]
-       -d, --domain        domain simulate is hosted on  [forio.com]
+       -p, --platform      Platform (epicenter or simulate)  [epicenter]
+       -c, --config_file   Path to config file  [./config.json]
+       -d, --domain        Domain Epicenter or Simulate is hosted on  [api.forio.com or forio.com]
 
     Deploy files to a simulation
 
 This will ask for a confirmation before deploying, and also make sure the path you're deploying to exists.
 
-### Sync
+Skipping `local_dir` in the mapping defaults to current working directory. Skipping `account` defaults to using your account.
+
+### `F sync`
+
     Usage: F sync <mapping> [options]
 
-    mapping     <local_dir>:<sim_author>/<sim_name>
+    mapping     <local_dir>:<account>/<project>
 
     Options:
-       -c, --config_file   Path to config file  [/Users/narenranjit/FPrjs/scripts/lib/runnable/../../config.json]
+       -p, --platform      Platform (epicenter or simulate)  [epicenter]
+       -c, --config_file   Path to config file  [./config.json]
+       -d, --domain        Domain Epicenter or Simulate is hosted on  [api.forio.com or forio.com]
        -i, --ignore        Regex with pattern of files to ignore for sync
-       -d, --domain        domain simulate is hosted on  [forio.com]
 
-    Watch dir for changes and upload to simulation
+    Watch dir for changes and upload to a simulation
 
-Skipping __local_dir__ in the mapping defaults to current working directory. Skipping __sim_author__ defaults to using your account.
+Skipping `local_dir` in the mapping defaults to current working directory. Skipping `account` defaults to using your account.
 
 This command may crash on OS X when uploading a large number of files simultaneously. This can be fixed by running this command in your terminal, or putting it in your `~/.bash_profile` file:
 
@@ -59,9 +66,9 @@ Creating new commands is fairly straight forward.
 
 All commands need to implement the following interface.
 
-- __exports.run__: An object with the options you want to expose. See [nomnom][nom_nom_site] for options.
-- __exports.help__: One line description of what the command does
-- __exports.run__: This command will be passed a parsed object with any parameters passed from the console. Do with it what you will.
+- `exports.help`: One line description of what the command does
+- `exports.options`: An object with the options you want to expose. See [nomnom][nom_nom_site] for options.
+- `exports.run`: This command will be passed a parsed object with any parameters passed from the console. Do with it what you will.
 
 ## Other utilities
 
