@@ -73,6 +73,7 @@ exports.run = (options)->
         createTempZip local, tempFile, ()->
             getToken (token)->
                 uploadFile token, ()->
+                    console.log('hi')
                     st = fs.statSync(tempFile)
                     sizeInMB = (st.size / (1024 * 1024)).toFixed(2)
 
