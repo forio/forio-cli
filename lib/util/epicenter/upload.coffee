@@ -7,7 +7,7 @@ uploadFileAPI = (domain, localPath, simPath, token, callback) ->
     exec """curl --silent -L -H "Authorization: Bearer #{token}" -F file=@#{localPath} -F name=#{file_name} -X PUT #{file_url}""", callback
 
 uploadZip = (domain, localPath, simPath, token, callback) ->
-    file_url = "#{domain}/simulate/api/file/#{simPath}"
+    file_url = "https://#{domain}/file/#{simPath}"
     file_name = path.basename localPath
     unzip_params =
         contentType: "application/unzip"
