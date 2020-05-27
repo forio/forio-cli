@@ -43,6 +43,7 @@ watch = (token, conf = config) ->
             if tryCount > MAX_RETRIES
                 die()
 
+        simPath = simPath.replace(/\\/g,"/")
         uploader.uploadFileAPI conf.domain, localPath, simPath, token, (err, stdout, stderr) ->
             diff = process.hrtime time
             formattedDiff = ((diff[0] * 1e9 + diff[1]) / 1000000).toFixed(0)
@@ -51,6 +52,7 @@ watch = (token, conf = config) ->
                 #Server sometimes doesn't return json for no reason, ignore and try again
                 response = JSON.parse stdout
             catch
+                console.log simPath + "|" + localPath
                 return upload localPath, stats, tryCount + 1
 
             if not response.status? or +response.status in [200, 201]
