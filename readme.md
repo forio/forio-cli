@@ -2,16 +2,38 @@
 
 Forio CLI is both a set of tools to ease your workflow for working with simulations on Forio Epicenter or Forio Simulate, as well as a framework for making your own.
 
-## Quick Start
+## Note when syncing with Forio Epicenter
+
+The folder containing your interface files must be named "static" as this folder is synced directly with the Epicenter "static" (interface) folder.
+
+## Quick Start - Mac/Linux
 
     $ npm install -g coffee-script #If you don't already have it
     $ git clone https://github.com/forio/forio-cli.git
     $ cd forio-cli
     $ npm install
     $ chmod +x index.coffee
-    $ alias F='~/PROJECT_PATH/forio-cli/index.coffee'
     $ cp config-sample.json config.json #Use this to manage creds until SIMULATE-6036 is fixed
+    
+Edit the file "config.json" in the "forio-cli" directory.   cd into your project directory, one level up from "static" folder containing the source.  Finally, run the script.
 
+    $ alias F='~/PROJECT_PATH/forio-cli/index.coffee'
+    $ F sync static:<TEAM_NAME>/<PROJECT_NAME>
+
+## Quick Start - Windows
+
+For Windows, the usage is a little different as Windows does not support aliases or chmod.   In the line below, change the
+paths for the forio-cli directory as appropriate.
+
+    $ npm install -g coffee-script #If you don't already have it
+    $ git clone https://github.com/forio/forio-cli.git
+    $ cd forio-cli
+    $ npm install
+    
+Create a file "config.json" based on "config-sample.json" in the "forio-cli" directory.   Then cd into your project directory, one level up from "static" folder containing the source.  Finally, run the script.
+    
+    $ coffee <PATH_TO_FORIO_CLI>\forio-cli\index.coffee sync static:<TEAM_NAME>/<PROJECT_NAME>
+    
 ## Commands
 
 Commands are high-level actions you're allowed to perform. Each command can define its own optional parameters. Invoking the command without specifying any of the required options prints out the usage. The following commands are currently supported
